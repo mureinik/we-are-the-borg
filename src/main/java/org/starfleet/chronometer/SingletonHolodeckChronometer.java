@@ -5,13 +5,20 @@ package org.starfleet.chronometer;
  */
 public class SingletonHolodeckChronometer implements HolodeckChronometer {
     /** Eagerly loaded singleton instance */
-    private static final SingletonHolodeckChronometer instance = new SingletonHolodeckChronometer();
+    private static volatile SingletonHolodeckChronometer instance = null;
 
     /** The frozen time, if exists */
     private long frozenTime = -1L;
 
     /** @return The single(ton) instance */
     public static SingletonHolodeckChronometer getInstance() {
+        if (instance == null) {
+            synchronized (SingletonHolodeckChronometer.class) {
+                if (instance == null) {
+                    instance = new SingletonHolodeckChronometer();
+                }
+            }
+        }
         return instance;
     }
 
